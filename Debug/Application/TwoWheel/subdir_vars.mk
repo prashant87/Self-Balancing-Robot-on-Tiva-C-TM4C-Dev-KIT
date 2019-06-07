@@ -5,28 +5,22 @@
 SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CMD_SRCS += \
-../tm4c123gh6pm.cmd 
-
-LIB_SRCS += \
-../driverlib.lib 
-
 C_SRCS += \
-../tm4c123gh6pm_startup_ccs.c 
+../Application/TwoWheel/twowheel.c 
 
 C_DEPS += \
-./tm4c123gh6pm_startup_ccs.d 
+./Application/TwoWheel/twowheel.d 
 
 OBJS += \
-./tm4c123gh6pm_startup_ccs.obj 
+./Application/TwoWheel/twowheel.obj 
 
 OBJS__QUOTED += \
-"tm4c123gh6pm_startup_ccs.obj" 
+"Application\TwoWheel\twowheel.obj" 
 
 C_DEPS__QUOTED += \
-"tm4c123gh6pm_startup_ccs.d" 
+"Application\TwoWheel\twowheel.d" 
 
 C_SRCS__QUOTED += \
-"../tm4c123gh6pm_startup_ccs.c" 
+"../Application/TwoWheel/twowheel.c" 
 
 

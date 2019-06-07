@@ -10,16 +10,28 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./main.obj" \
-"./scheduler.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
-"./uartstdio.obj" \
-"./Encoder/QEI.obj" \
-"./LED/led.obj" \
-"./MPU/MPU6050.obj" \
-"./PID/PID.obj" \
-"./PWM/pwm.obj" \
-"./TwoWheel/TwoWheel.obj" \
+"./Application/TwoWheel/twowheel.obj" \
+"./Application/freertos_demo.obj" \
+"./Application/motor_control/motor_control.obj" \
+"./Application/pid/pid.obj" \
+"./FreeRTOS/croutine.obj" \
+"./FreeRTOS/event_groups.obj" \
+"./FreeRTOS/heap_2.obj" \
+"./FreeRTOS/list.obj" \
+"./FreeRTOS/port.obj" \
+"./FreeRTOS/portasm.obj" \
+"./FreeRTOS/queue.obj" \
+"./FreeRTOS/stream_buffer.obj" \
+"./FreeRTOS/tasks.obj" \
+"./FreeRTOS/timers.obj" \
+"./drivers/MPU6050.obj" \
+"./drivers/buttons.obj" \
+"./drivers/led.obj" \
+"./drivers/pwm.obj" \
+"./drivers/qei.obj" \
+"./drivers/switches.obj" \
+"./drivers/uartstdio.obj" \
 "../driverlib.lib" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -33,19 +45,19 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
--include Encoder/subdir_vars.mk
--include LED/subdir_vars.mk
--include MPU/subdir_vars.mk
--include PID/subdir_vars.mk
--include PWM/subdir_vars.mk
--include TwoWheel/subdir_vars.mk
+-include Application/TwoWheel/subdir_vars.mk
+-include Application/subdir_vars.mk
+-include Application/motor_control/subdir_vars.mk
+-include Application/pid/subdir_vars.mk
+-include FreeRTOS/subdir_vars.mk
+-include drivers/subdir_vars.mk
 -include subdir_rules.mk
--include Encoder/subdir_rules.mk
--include LED/subdir_rules.mk
--include MPU/subdir_rules.mk
--include PID/subdir_rules.mk
--include PWM/subdir_rules.mk
--include TwoWheel/subdir_rules.mk
+-include Application/TwoWheel/subdir_rules.mk
+-include Application/subdir_rules.mk
+-include Application/motor_control/subdir_rules.mk
+-include Application/pid/subdir_rules.mk
+-include FreeRTOS/subdir_rules.mk
+-include drivers/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -142,42 +154,43 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-MBED.out \
+FreeRTOS_F.out \
 
 EXE_OUTPUTS__QUOTED += \
-"MBED.out" \
+"FreeRTOS_F.out" \
 
 BIN_OUTPUTS += \
-MBED.hex \
+FreeRTOS_F.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"MBED.hex" \
+"FreeRTOS_F.hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "MBED.out"
+	@$(MAKE) --no-print-directory -Onone "FreeRTOS_F.out"
 
 # Tool invocations
-MBED.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
+FreeRTOS_F.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=TARGET_IS_BLIZZARD_RB1 --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"MBED.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/lib" -i"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="MBED_linkInfo.xml" --rom_model -o "MBED.out" $(ORDERED_OBJS)
+	"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=TARGET_IS_BLIZZARD_RB1 --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"FreeRTOS_F.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/lib" -i"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="FreeRTOS_F_linkInfo.xml" --rom_model -o "FreeRTOS_F.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-MBED.hex: $(EXE_OUTPUTS)
+FreeRTOS_F.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/bin/armhex"  -o "MBED.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccs901/ccs/tools/compiler/ti-cgt-arm_18.12.1.LTS/bin/armhex"  -o "FreeRTOS_F.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "scheduler.obj" "tm4c123gh6pm_startup_ccs.obj" "uartstdio.obj" "Encoder\QEI.obj" "LED\led.obj" "MPU\MPU6050.obj" "PID\PID.obj" "PWM\pwm.obj" "TwoWheel\TwoWheel.obj" 
-	-$(RM) "main.d" "scheduler.d" "tm4c123gh6pm_startup_ccs.d" "uartstdio.d" "Encoder\QEI.d" "LED\led.d" "MPU\MPU6050.d" "PID\PID.d" "PWM\pwm.d" "TwoWheel\TwoWheel.d" 
+	-$(RM) "tm4c123gh6pm_startup_ccs.obj" "Application\TwoWheel\twowheel.obj" "Application\freertos_demo.obj" "Application\motor_control\motor_control.obj" "Application\pid\pid.obj" "FreeRTOS\croutine.obj" "FreeRTOS\event_groups.obj" "FreeRTOS\heap_2.obj" "FreeRTOS\list.obj" "FreeRTOS\port.obj" "FreeRTOS\portasm.obj" "FreeRTOS\queue.obj" "FreeRTOS\stream_buffer.obj" "FreeRTOS\tasks.obj" "FreeRTOS\timers.obj" "drivers\MPU6050.obj" "drivers\buttons.obj" "drivers\led.obj" "drivers\pwm.obj" "drivers\qei.obj" "drivers\switches.obj" "drivers\uartstdio.obj" 
+	-$(RM) "tm4c123gh6pm_startup_ccs.d" "Application\TwoWheel\twowheel.d" "Application\freertos_demo.d" "Application\motor_control\motor_control.d" "Application\pid\pid.d" "FreeRTOS\croutine.d" "FreeRTOS\event_groups.d" "FreeRTOS\heap_2.d" "FreeRTOS\list.d" "FreeRTOS\port.d" "FreeRTOS\queue.d" "FreeRTOS\stream_buffer.d" "FreeRTOS\tasks.d" "FreeRTOS\timers.d" "drivers\MPU6050.d" "drivers\buttons.d" "drivers\led.d" "drivers\pwm.d" "drivers\qei.d" "drivers\switches.d" "drivers\uartstdio.d" 
+	-$(RM) "FreeRTOS\portasm.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

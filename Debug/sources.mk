@@ -112,10 +112,10 @@ PDE_DEPS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 . \
-Encoder \
-LED \
-MPU \
-PID \
-PWM \
-TwoWheel \
+Application/TwoWheel \
+Application \
+Application/motor_control \
+Application/pid \
+FreeRTOS \
+drivers \
 
