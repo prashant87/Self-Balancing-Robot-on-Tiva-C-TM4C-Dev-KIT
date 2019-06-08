@@ -26,6 +26,15 @@ float pid_compute(pid_controller_t *pid, float error, float dt){
             pid_output = pid_output < pid->output_max ? pid_output : pid->output_max;
 
             return pid_output + pid->ouput_offset;
-
-
+}
+float pid_compute_2(pid_t *pid,float error,float dt){
+    pid->e__ = pid -> e_;
+    pid->e_  = pid -> e ;
+    pid->e   = error;
+    pid->u_  = pid ->u;
+    pid->u   = pid->u_ +
+            (pid->kp)*(pid->e - pid->e_)+
+            (pid->ki)*(pid->e + pid->e_)*(pid->Ts)+
+            (pid->kd)*(pid->e -(2*pid->e_)+pid->e__)/(pid->Ts);
+            return pid->u;
 }

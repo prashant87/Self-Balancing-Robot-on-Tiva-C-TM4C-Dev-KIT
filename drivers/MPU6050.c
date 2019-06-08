@@ -327,7 +327,7 @@ void Kalman_Filter_Process(void){
     //gyroXangle += kalmanX.getRate() * dt; // Calculate gyro angle using the unbiased rate
     //gyroYangle += kalmanY.getRate() * dt;
 
-    compAngleX = 0.98 * (compAngleX + gyroXrate * dt_update) + 0.02 * roll; // Calculate the angle using a Complimentary filter
+    compAngleX = 0.99 * (compAngleX + gyroXrate * dt_update) + 0.01 * roll; // Calculate the angle using a Complimentary filter
     compAngleY = 0.99 * (compAngleY + gyroYrate * dt_update) + 0.01 * pitch;
 
     // Reset the gyro angle when it has drifted too much
